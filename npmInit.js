@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
-const fs = require('fs')
+const fs = require('fs');
+const clc = require('cli-color')
 
 const { createDep, createDevDep} = require('./fileCreation');
 
@@ -17,8 +18,9 @@ const init = (projectName) => {
         //write new package.json file with pretty-print
         fs.writeFile(`../${projectName}/package.json`, JSON.stringify(data, null, 4), (err)=>{
             if(err){
-                console.log(err)
+                console.log(clc.red(err))
             }
+            console.log(clc.green('npm being added'))
             createDep(projectName)
             createDevDep(projectName)
         }) 
