@@ -2,7 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const clc = require('cli-color')
 
-const { createDep, createDevDep} = require('./fileCreation');
+const { createDep, createDevDep, createClient, createPublic, createServer} = require('./fileCreation');
 
 const init = (projectName) => {
     const npm = exec('npm init -y', {cwd: `/${projectName}`})
@@ -23,8 +23,12 @@ const init = (projectName) => {
             console.log(clc.green('npm being added'))
             createDep(projectName)
             createDevDep(projectName)
+            createClient(projectName)
+            createPublic(projectName)
+            createServer(projectName)
         }) 
     })
+    
 }
 
 
