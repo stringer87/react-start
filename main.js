@@ -15,7 +15,7 @@ newProjectName += name;
 const createProject = () => {
     fs.writeFile(`${newProjectName}/.babelrc`, JSON.stringify(babel, null, 4),(err)=> errFunc(err))
     fs.writeFile(`${newProjectName}/webpack.config.js`, webpack,(err)=> errFunc(err))
-    fs.writeFileSync(`${newProjectName}/.gitignore`, ignore, (err) => errFunc(err))
+    fs.writeFile(`${newProjectName}/.gitignore`, ignore, (err) => errFunc(err))
     init(name)
 }
 
@@ -29,12 +29,20 @@ const errFunc = (err) => {
             process.exit();
         } else if(duplicateFileRes.toUpperCase() === 'Y'){
             //remove all files if project directory
-            exec(`rm -rf ${newProjectName}/.`, (error) => {
-                createProject()
+            fs.rmdir(`${newProjectName}`, {recursive: true}, (error)=> {
+                if(error){
+                    console.log(clc.red(error))
+                    // throw error
+                }
+                fs.mkdir(`${newProjectName}`, (err) => {
+                    if(err){
+                        throw err
+                    }
+                    createProject()
+                })
             })
+            
         }
-    } else if(err){
-        console.log(clc.red(err))
     }
     
 }
